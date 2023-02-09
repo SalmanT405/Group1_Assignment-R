@@ -1,0 +1,102 @@
+---
+title: "Data Analysis using R programming"
+output: pdf_document
+---
+
+```{r}
+
+
+# loading the dataset into R
+dataset <- read.csv("movies.csv")
+
+
+# Printing the structure of the dataset 
+str(dataset)
+
+# List the variables in the dataset
+names(dataset)
+
+# Printing the top 15 rows of the dataset
+head(dataset, 15)
+
+# User defined function to calculate profit based on the budget and the income
+calculate_profit <- function(dataset) {
+  dataset$profit <- dataset$income - dataset$budget
+  return(dataset)
+}
+
+# Filtering rows based on ratings
+new_df <- dataset[dataset$rating > 8.5, ]
+
+
+# Creating a new data frame by joining dependant and independant variables
+
+dependent_var <- c("Rating", "Income")
+independent_var <- c("Budget", "Year", "Runtime")
+
+new_df2 <- cbind(dataset[, dependent_var], dataset[, independent_var])
+
+
+# Removing missing values
+dataset <- dataset[complete.cases(dataset), ]
+dataset <- na.omit(dataset)
+
+
+# Removing duplicated data
+dataset <- unique(dataset)
+
+# Re-ordering rows in descending order
+dataset <- dataset[order(dataset$Year, decreasing = TRUE), ]
+dataset <- dataset[order(dataset$Rating, decreasing = TRUE), ]
+
+
+# Renaming some of the column names
+colnames(dataset) <- c("Movie Title", "Rating", "Year", "Month", "Certificate", "Runtime",
+"Directors", "Cast", "Genre", "Location", "Budget", "Income", "Country")
+
+# Adding new variables by using a mathematical function 
+dataset$Year_2x <- dataset$Year * 2
+
+# Creating a training set using a random number generator engine
+set.seed(123)
+train_index <- sample(1:nrow(dataset), 0.8 * nrow(dataset))
+train_set <- dataset[train_index, ]
+test_set <- dataset[-train_index, ]
+
+# Printing the summary statistics of the dataset
+summary(dataset)
+
+# Using the income variables and performing these statistical functions
+mean(dataset$Rating)
+median(dataset$Rating)
+mode(dataset$Rating)
+range(dataset$Rating)
+
+
+# Scatter plot for year vs rating
+plot(dataset$Year, dataset$Rating, xlab = "Year", ylab = "Rating", main = "Scatter Plot of Year vs Rating")
+
+# Bar plot for the budget and income variables
+barplot(table(dataset$Rating), xlab = "Rating", ylab = "Frequency", main = "Bar Plot of Ratings")
+barplot(table(dataset$Year), xlab = "Year", ylab = "Frequency", main = "Bar Plot of Year")
+
+# Finding the correlation between year released and ratings
+model <- lm(Rating ~ Year, data = dataset)
+summary(model)
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
