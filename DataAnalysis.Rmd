@@ -1,5 +1,5 @@
 ---
-title: "Data Analysis using R programming"
+title: "Data Analytics Assignment using R (Group 1)"
 output: pdf_document
 ---
 
